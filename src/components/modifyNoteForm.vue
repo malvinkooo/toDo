@@ -27,11 +27,6 @@ import Input from "@/components/input.vue"
 export default {
     data() {
         return {
-            note: {
-                id: 0,
-                title: "",
-                text: ""
-            },
             titleErrorMessage: null,
             textErrorMessage: null
         };
@@ -41,18 +36,36 @@ export default {
         Input
     },
 
-    computed: {},
+    props: ["noteData"],
+
+    computed: {
+        note() {
+            return this.noteData
+                ? this.noteData
+                : {
+                      id: 0,
+                      title: "",
+                      text: ""
+                  };
+        }
+    },
 
     methods: {
         formSubmit() {
             const note = {
-                id: Date.now(),
                 title: this.note.title,
                 text: this.note.text
             };
 
             if (this.isFormValid()) {
-                this.$store.commit("addNote", note);
+                if (this.noteData) {
+                    note.id = this.note.id;
+                    this.$store.commit("updateNote", note);
+                } else {
+                    note.id = Date.now();
+                    this.$store.commit("addNote", note);
+                }
+
                 this.clearForm();
             }
         },

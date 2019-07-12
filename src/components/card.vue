@@ -1,7 +1,7 @@
 <template>
     <div class="card-1">
         <div class="card-1-actions">
-            <button class="icon" type="button">
+            <button class="icon" type="button" @click.stop="editNote">
                 <Icon><icon-edit /></Icon>
             </button>
             <button class="icon" type="button" @click="deleteNote">
@@ -32,7 +32,16 @@ export default {
         deleteNote() {
             this.$emit("deleteBtnClick", {
                 id: this.id,
-                title: this.title
+                title: this.title,
+                text: this.text,
+            });
+        },
+
+        editNote() {
+            this.$emit("editBtnClick", {
+                id: this.id,
+                title: this.title,
+                text: this.text,
             });
         }
     },

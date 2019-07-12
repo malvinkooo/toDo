@@ -1,13 +1,20 @@
 <template>
     <header class="header">
         <p class="user">example@gmail.com</p>
-        <a href="#" class="btn">Log out</a>
+        <a href="#" class="btn" @click="logOut">Log out</a>
     </header>
 </template>
 <script>
 export default {
     data() {
         return {};
+    },
+
+    methods: {
+        logOut() {
+            this.$store.commit("deleteUser");
+            this.$router.push("login")
+        }
     }
 };
 </script>

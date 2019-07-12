@@ -5,23 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        notes: [
-            {
-                id: 1,
-                title: 'title 1',
-                text: 'text 1'
-            },
-            {
-                id: 2,
-                title: 'title 2',
-                text: 'text 2'
-            },
-            {
-                id: 3,
-                title: 'title 3',
-                text: 'text 3'
-            }
-        ],
+        notes: [],
+        email: null,
     },
     mutations: {
         addNote(state, note) {
@@ -35,6 +20,16 @@ export default new Vuex.Store({
         updateNote(state, note) {
             state.notes = state.notes.map(itm => itm.id === note.id ? note : itm)
         },
+
+        addUser(state, email) {
+            window.localStorage.setItem("my_email", JSON.stringify(email));
+            state.email = email;
+        },
+
+        deleteUser(state) {
+            window.localStorage.removeItem("my_email");
+            state.email = null;
+        }
     },
     actions: {
 

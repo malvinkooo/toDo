@@ -3,7 +3,7 @@
         <Header></Header>
 
         <div class="drawer" @click.stop>
-            <ModifyNoteForm></ModifyNoteForm>
+            <ModifyNoteForm :noteData="cardData"></ModifyNoteForm>
 
             <button class="icon" type="button" @click="hideDrawer">
                 <Icon viewbox="0 0 40 41" width="40" height="40">
@@ -18,12 +18,14 @@
                     v-for="note in notesList"
                     v-bind="note"
                     :key="note.id"
-                    v-on:deleteBtnClick="showConfirmPopup"></Card>
+                    v-on:deleteBtnClick="showConfirmPopup"
+                    v-on:editBtnClick="showEditDrawer"
+                ></Card>
             </div>
         </div>
 
         <button type="button" class="float-btn" @click.stop="showDrawer">+</button>
-        
+
         <ConfirmPopup
             v-bind:popupData="popupData"
             v-bind:isVisible="isConfirmPopupVisible"
@@ -33,12 +35,12 @@
 </template>
 
 <script>
-import Header from "@/components/header.vue"
-import ModifyNoteForm from "@/components/modifyNoteForm.vue"
-import Card from "@/components/card.vue"
-import Icon from "@/components/icon.vue"
-import IconClose from "@/components/icons/IconClose.vue"
-import ConfirmPopup from "@/components/confirmPopup.vue"
+import Header from "@/components/header.vue";
+import ModifyNoteForm from "@/components/modifyNoteForm.vue";
+import Card from "@/components/card.vue";
+import Icon from "@/components/icon.vue";
+import IconClose from "@/components/icons/IconClose.vue";
+import ConfirmPopup from "@/components/confirmPopup.vue";
 
 export default {
     data() {
@@ -46,14 +48,15 @@ export default {
             isConfirmPopupVisible: false,
             popupData: {
                 id: 0,
-                title: "",
-            }
-        }
+                title: ""
+            },
+            cardData: null
+        };
     },
 
     computed: {
         notesList() {
-            return this.$store.state.notes
+            return this.$store.state.notes;
         }
     },
 
@@ -63,7 +66,15 @@ export default {
         Card,
         Icon,
         IconClose,
-        ConfirmPopup
+        ConfirmPopup,
+    },
+
+    created() {
+        if (!window.localStorage.my_email) {
+            this.$router.push("login")
+        } else {
+            this.$store.commit("addUser", JSON.parse(window.localStorage.my_email));
+        }
     },
 
     methods: {
@@ -75,16 +86,23 @@ export default {
         hideDrawer() {
             const body = document.querySelector("body");
             body.classList.remove("-drawer-opened");
+
+            this.cardData = null;
         },
 
         showConfirmPopup(data) {
-            this.popupData.id = data.id
-            this.popupData.title = data.title
-            this.isConfirmPopupVisible = true
+            this.popupData.id = data.id;
+            this.popupData.title = data.title;
+            this.isConfirmPopupVisible = true;
         },
 
         hideConfirmPopup() {
-            this.isConfirmPopupVisible = false
+            this.isConfirmPopupVisible = false;
+        },
+
+        showEditDrawer(data) {
+            this.cardData = data;
+            this.showDrawer();
         }
     }
 };
