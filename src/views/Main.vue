@@ -4,7 +4,7 @@
 
         <div class="drawer" @click.stop>
             <ModifyNoteForm
-                :noteData="cardData"
+                :noteData.sync="cardData"
             ></ModifyNoteForm>
 
             <button class="icon" type="button" @click="hideDrawer">
@@ -52,7 +52,7 @@ export default {
                 id: 0,
                 title: ""
             },
-            cardData: null,
+            cardData: {},
         };
     },
 
@@ -89,7 +89,7 @@ export default {
             const body = document.querySelector("body");
             body.classList.remove("-drawer-opened");
 
-            this.cardData = null;
+            this.cardData = {};
         },
 
         showConfirmPopup(data) {

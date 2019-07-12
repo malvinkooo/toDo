@@ -1,24 +1,29 @@
 <template>
     <div class="form-box">
-        <h6 class="title" v-if="mode === 'add'">Добавить новую заметку</h6>
-        <h6 class="title" v-else-if="mode === 'edit'">Изменить заметку</h6>
+        <h6
+            class="title">
+            {{mode === 'add' ? "Добавить новую заметку" : "Изменить заметку"}}
+        </h6>
 
         <form class="form" @submit.prevent="formSubmit">
             <Input
                 label="Заголовок"
                 type="text"
-                v-bind:value.sync="note.title"
+                :value.sync="noteData.title"
                 :errorMessage="titleErrorMessage"
             />
             <Input
                 label="Текст"
                 type="multiline"
-                v-bind:value.sync="note.text"
+                :value.sync="noteData.text"
                 :errorMessage="textErrorMessage"
             />
 
-            <input type="submit" class="btn -big" value="Добавить" v-if="mode === 'add'" />
-            <input type="submit" class="btn -big" value="Сохранить" v-if="mode === 'edit'" />
+            <input
+                type="submit"
+                class="btn -big"
+                :value="mode === 'add' ? 'Добавить' : 'Сохранить'"
+            />
         </form>
     </div>
 </template>
@@ -31,7 +36,7 @@ export default {
         return {
             titleErrorMessage: null,
             textErrorMessage: null
-        };
+        }
     },
 
     components: {
@@ -41,16 +46,6 @@ export default {
     props: ["noteData"],
 
     computed: {
-        note() {
-            return this.noteData
-                ? this.noteData
-                : {
-                    id: "",
-                    title: "",
-                    text: ""
-                }
-        },
-
         mode() {
             return this.$store.state.formMode;
         }
@@ -59,35 +54,34 @@ export default {
     methods: {
         formSubmit() {
             const note = {
-                title: this.note.title,
-                text: this.note.text
+                title: this.noteData.title,
+                text: this.noteData.text
             };
 
             if (this.isFormValid()) {
                 if (this.mode === "edit") {
-                    note.id = this.note.id;
+                    note.id = this.noteData.id;
                     this.$store.commit("updateNote", note);
                     this.$store.commit("setAddFormMode");
                 } else if(this.mode === "add") {
                     note.id = Date.now();
                     this.$store.commit("addNote", note);
                 }
-
-                this.clearForm();
             }
+            this.clearForm();
         },
 
         isFormValid() {
             let result = true;
 
-            if (!this.note.title) {
+            if (!this.noteData.title) {
                 this.titleErrorMessage = "Это поле обязательно для заполнения.";
                 result = false;
             } else {
                 this.titleErrorMessage = null;
             }
 
-            if (!this.note.text) {
+            if (!this.noteData.text) {
                 this.textErrorMessage = "Это поле обязательно для заполнения.";
                 result = false;
             } else {
@@ -98,9 +92,7 @@ export default {
         },
 
         clearForm() {
-            this.note.id = "";
-            this.note.text = "";
-            this.note.title = "";
+            this.$emit("update:noteData", {});
         }
     }
 };

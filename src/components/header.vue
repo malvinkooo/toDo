@@ -1,13 +1,15 @@
 <template>
     <header class="header">
-        <p class="user">example@gmail.com</p>
+        <p class="user">{{ user }}</p>
         <a href="#" class="btn" @click="logOut">Log out</a>
     </header>
 </template>
 <script>
 export default {
-    data() {
-        return {};
+    computed: {
+        user() {
+            return this.$store.state.email;
+        }
     },
 
     methods: {
