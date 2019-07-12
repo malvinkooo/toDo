@@ -36,7 +36,7 @@ export default {
         },
 
         deleteCard() {
-            this.$store.commit("removeNote", this.popupData.id);
+            this.$store.dispatch("removeNote", this.popupData.id);
             this.$emit("closeBtnClick");
         }
     },

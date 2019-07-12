@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from "axios"
 
 Vue.use(Vuex)
 
@@ -8,14 +9,15 @@ export default new Vuex.Store({
         notes: [],
         email: null,
         formMode: "add",
+        baseUrl: "https://raysael.herokuapp.com",
     },
     mutations: {
-        addNote(state, note) {
-            state.notes.unshift(note)
+        setNotes(state, notes) {
+            state.notes = notes;
         },
 
         removeNote(state, noteId) {
-            state.notes = state.notes.filter(itm => itm.id !== noteId)
+            state.notes = state.notes.filter(itm => itm._id !== noteId)
         },
 
         updateNote(state, note) {
@@ -35,22 +37,68 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        addUser(state, email) {
+        addUser(context, email) {
             window.localStorage.setItem("my_email", JSON.stringify(email));
-            state.commit("addUser");
+            context.commit("addUser", email);
         },
 
-        deleteUser(state) {
+        deleteUser(context) {
             window.localStorage.removeItem("my_email");
-            state.commit("deleteUser");
+            context.commit("deleteUser");
         },
 
-        setEditFormMode(state) {
-            state.commit("setFormMode", "edit")
+        setEditFormMode(context) {
+            context.commit("setFormMode", "edit")
         },
 
-        setAddFormMode(state) {
-            state.commit("setFormMode", "add")
+        setAddFormMode(context) {
+            context.commit("setFormMode", "add")
+        },
+
+        getNotes(context) {
+            return axios({
+                    url: "/todo",
+                    method: "get",
+                    baseURL: context.state.baseUrl,
+                    params: {
+                        author: context.state.email,
+                    },
+                })
+                .then(response => {
+                    context.commit("setNotes", response.data)
+                })
+        },
+
+        addNote(context, note) {
+            note.author = context.state.email;
+
+            return axios({
+                    url: "/todo",
+                    baseURL: context.state.baseUrl,
+                    method: "post",
+                    data: note,
+                })
+                .then(response => {
+                    context.dispatch("getNotes");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        },
+
+        removeNote(context, noteId) {
+            return axios({
+                    url: `/todo/${noteId}`,
+                    baseURL: context.state.baseUrl,
+                    method: "delete",
+                })
+                .then(response => {
+                    context.commit("removeNote", noteId);
+                    // context.dispatch("getNotes");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
     }
 })

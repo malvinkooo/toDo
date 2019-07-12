@@ -10,7 +10,7 @@
         </div>
         <h6 class="title">{{ title }}</h6>
         <div class="text">
-            <p>{{ text }}</p>
+            <p>{{ description }}</p>
         </div>
     </div>
 
@@ -31,9 +31,9 @@ export default {
     methods: {
         deleteNote() {
             this.$emit("deleteBtnClick", {
-                id: this.id,
+                id: this._id,
                 title: this.title,
-                text: this.text,
+                description: this.description,
             });
         },
 
@@ -42,12 +42,12 @@ export default {
             this.$emit("editBtnClick", {
                 id: this.id,
                 title: this.title,
-                text: this.text,
+                description: this.description,
             });
         }
     },
 
-    props: ["id", "title", "text"]
+    props: ["_id", "title", "description"]
 }
 </script>
 

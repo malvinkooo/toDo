@@ -15,8 +15,8 @@
             <Input
                 label="Текст"
                 type="multiline"
-                :value.sync="noteData.text"
-                :errorMessage="textErrorMessage"
+                :value.sync="noteData.description"
+                :errorMessage="descriptionErrorMessage"
             />
 
             <input
@@ -35,7 +35,7 @@ export default {
     data() {
         return {
             titleErrorMessage: null,
-            textErrorMessage: null
+            descriptionErrorMessage: null
         }
     },
 
@@ -55,20 +55,19 @@ export default {
         formSubmit() {
             const note = {
                 title: this.noteData.title,
-                text: this.noteData.text
+                description: this.noteData.description
             };
 
             if (this.isFormValid()) {
                 if (this.mode === "edit") {
-                    note.id = this.noteData.id;
                     this.$store.commit("updateNote", note);
                     this.$store.dispatch("setAddFormMode");
                 } else if(this.mode === "add") {
-                    note.id = Date.now();
-                    this.$store.commit("addNote", note);
+                    this.$store.dispatch("addNote", note);
                 }
             }
-            this.clearForm();
+
+            // this.clearForm();
         },
 
         isFormValid() {
@@ -81,11 +80,11 @@ export default {
                 this.titleErrorMessage = null;
             }
 
-            if (!this.noteData.text) {
-                this.textErrorMessage = "Это поле обязательно для заполнения.";
+            if (!this.noteData.description) {
+                this.descriptionErrorMessage = "Это поле обязательно для заполнения.";
                 result = false;
             } else {
-                this.textErrorMessage = null;
+                this.descriptionErrorMessage = null;
             }
 
             return result;

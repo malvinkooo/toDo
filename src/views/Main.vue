@@ -77,6 +77,14 @@ export default {
         } else {
             this.$store.dispatch("addUser", JSON.parse(window.localStorage.my_email))
         }
+
+        this.$store.dispatch("getNotes")
+            .then(response => {
+                // console.log(response)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     },
 
     methods: {
