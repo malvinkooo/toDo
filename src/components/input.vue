@@ -92,7 +92,8 @@ export default {
             pointer-events: none;
         }
 
-        &:hover {
+        &:hover,
+        &:focus {
             color: #df007e;
         }
     }

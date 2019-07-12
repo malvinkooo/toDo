@@ -75,7 +75,7 @@ export default {
         if (!window.localStorage.my_email) {
             this.$router.push("login")
         } else {
-            this.$store.commit("addUser", JSON.parse(window.localStorage.my_email));
+            this.$store.dispatch("addUser", JSON.parse(window.localStorage.my_email))
         }
     },
 
@@ -160,7 +160,8 @@ body {
         color: #eca8ce;
         transition: 0.3s;
 
-        &:hover {
+        &:hover,
+        &:focus {
             color: #df007e;
         }
     }
@@ -182,7 +183,8 @@ body {
     right: 20px;
     cursor: pointer;
 
-    &:hover {
+    &:hover,
+    &:focus {
         background-color: #bdfd37;
     }
 }

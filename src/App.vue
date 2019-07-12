@@ -59,7 +59,8 @@ button {
         min-width: 120px;
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
         background-color: #8de300;
     }
 
@@ -67,7 +68,8 @@ button {
         background-color: #df007e;
         color: #fff;
 
-        &:hover {
+        &:hover,
+        &:focus {
             background-color: #E954A9;
         }
     }

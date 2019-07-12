@@ -30,23 +30,27 @@ export default new Vuex.Store({
             state.email = null
         },
 
-        setEditFormMode(state) {
-            state.formMode = "edit"
+        setFormMode(state, mode) {
+            state.formMode = mode
         },
-
-        setAddFormMode(state) {
-            state.formMode = "add"
-        }
     },
     actions: {
         addUser(state, email) {
             window.localStorage.setItem("my_email", JSON.stringify(email));
-            state.commit('addUser');
+            state.commit("addUser");
         },
 
         deleteUser(state) {
             window.localStorage.removeItem("my_email");
-            state.commit('addUser');
+            state.commit("deleteUser");
+        },
+
+        setEditFormMode(state) {
+            state.commit("setFormMode", "edit")
+        },
+
+        setAddFormMode(state) {
+            state.commit("setFormMode", "add")
         }
     }
 })

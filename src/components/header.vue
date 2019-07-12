@@ -8,14 +8,14 @@
 export default {
     computed: {
         user() {
-            return this.$store.state.email;
+            return this.$store.state.email
         }
     },
 
     methods: {
         logOut() {
             this.$store.dispatch("deleteUser");
-            this.$router.push("login")
+            this.$router.push("login");
         }
     }
 };

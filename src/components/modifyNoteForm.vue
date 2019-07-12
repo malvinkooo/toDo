@@ -47,7 +47,7 @@ export default {
 
     computed: {
         mode() {
-            return this.$store.state.formMode;
+            return this.$store.state.formMode
         }
     },
 
@@ -62,7 +62,7 @@ export default {
                 if (this.mode === "edit") {
                     note.id = this.noteData.id;
                     this.$store.commit("updateNote", note);
-                    this.$store.commit("setAddFormMode");
+                    this.$store.dispatch("setAddFormMode");
                 } else if(this.mode === "add") {
                     note.id = Date.now();
                     this.$store.commit("addNote", note);
