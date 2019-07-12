@@ -7,6 +7,7 @@ export default new Vuex.Store({
     state: {
         notes: [],
         email: null,
+        formMode: "add",
     },
     mutations: {
         addNote(state, note) {
@@ -22,16 +23,30 @@ export default new Vuex.Store({
         },
 
         addUser(state, email) {
-            window.localStorage.setItem("my_email", JSON.stringify(email));
             state.email = email;
         },
 
         deleteUser(state) {
-            window.localStorage.removeItem("my_email");
             state.email = null;
+        },
+
+        setEditFormMode(state) {
+            state.formMode = "edit";
+        },
+
+        setAddFormMode(state) {
+            state.formMode = "add";
         }
     },
     actions: {
+        addUser(state, email) {
+            window.localStorage.setItem("my_email", JSON.stringify(email));
+            state.commit('addUser');
+        },
 
+        deleteUser(state) {
+            window.localStorage.removeItem("my_email");
+            state.commit('addUser');
+        }
     }
 })

@@ -38,6 +38,7 @@ export default {
         },
 
         editNote() {
+            this.$store.commit("setEditFormMode");
             this.$emit("editBtnClick", {
                 id: this.id,
                 title: this.title,

@@ -3,7 +3,9 @@
         <Header></Header>
 
         <div class="drawer" @click.stop>
-            <ModifyNoteForm :noteData="cardData"></ModifyNoteForm>
+            <ModifyNoteForm
+                :noteData="cardData"
+            ></ModifyNoteForm>
 
             <button class="icon" type="button" @click="hideDrawer">
                 <Icon viewbox="0 0 40 41" width="40" height="40">
@@ -50,7 +52,7 @@ export default {
                 id: 0,
                 title: ""
             },
-            cardData: null
+            cardData: null,
         };
     },
 

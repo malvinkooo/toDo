@@ -1,6 +1,7 @@
 <template>
     <div class="form-box">
-        <h6 class="title">Добавить новую заметку</h6>
+        <h6 class="title" v-if="mode === 'add'">Добавить новую заметку</h6>
+        <h6 class="title" v-else-if="mode === 'edit'">Изменить заметку</h6>
 
         <form class="form" @submit.prevent="formSubmit">
             <Input
@@ -16,13 +17,14 @@
                 :errorMessage="textErrorMessage"
             />
 
-            <input type="submit" class="btn -big" value="Добавить" />
+            <input type="submit" class="btn -big" value="Добавить" v-if="mode === 'add'" />
+            <input type="submit" class="btn -big" value="Сохранить" v-if="mode === 'edit'" />
         </form>
     </div>
 </template>
 
 <script>
-import Input from "@/components/input.vue"
+import Input from "@/components/input.vue";
 
 export default {
     data() {
@@ -43,10 +45,14 @@ export default {
             return this.noteData
                 ? this.noteData
                 : {
-                      id: 0,
-                      title: "",
-                      text: ""
-                  };
+                    id: "",
+                    title: "",
+                    text: ""
+                }
+        },
+
+        mode() {
+            return this.$store.state.formMode;
         }
     },
 
@@ -58,10 +64,11 @@ export default {
             };
 
             if (this.isFormValid()) {
-                if (this.noteData) {
+                if (this.mode === "edit") {
                     note.id = this.note.id;
                     this.$store.commit("updateNote", note);
-                } else {
+                    this.$store.commit("setAddFormMode");
+                } else if(this.mode === "add") {
                     note.id = Date.now();
                     this.$store.commit("addNote", note);
                 }
@@ -91,6 +98,7 @@ export default {
         },
 
         clearForm() {
+            this.note.id = "";
             this.note.text = "";
             this.note.title = "";
         }

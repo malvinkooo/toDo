@@ -33,7 +33,7 @@ export default {
             const { email } = this.user;
 
             if(this.isFormValid()) {
-                this.$store.commit("addUser", email);
+                this.$store.dispatch("addUser", email);
                 this.$router.push("/");
             }
         },
@@ -47,7 +47,6 @@ export default {
                 this.errorMessage = "Это поле обязательно для заполнения";
                 result = false;
             } else if(!(emailRegExp.test(email))) {
-                console.log("reg");
                 this.errorMessage = "Вы ввели некорректный электронный адрес"
                 result = false;
             } else {

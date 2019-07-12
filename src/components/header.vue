@@ -12,7 +12,7 @@ export default {
 
     methods: {
         logOut() {
-            this.$store.commit("deleteUser");
+            this.$store.dispatch("deleteUser");
             this.$router.push("login")
         }
     }
