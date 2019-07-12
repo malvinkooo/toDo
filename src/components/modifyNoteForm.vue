@@ -2,15 +2,19 @@
     <div class="form-box">
         <h6 class="title">Добавить новую заметку</h6>
 
-        <form class="form">
-            <label class="input">
-                <span class="label">Заголовок</span>
-                <input type="text" />
-            </label>
-            <label class="input">
-                <span class="label">Текст</span>
-                <textarea></textarea>
-            </label>
+        <form class="form" @submit.prevent="formSubmit">
+            <Input
+                label="Заголовок"
+                type="text"
+                v-bind:value.sync="note.title"
+                :errorMessage="titleErrorMessage"
+            />
+            <Input
+                label="Текст"
+                type="multiline"
+                v-bind:value.sync="note.text"
+                :errorMessage="textErrorMessage"
+            />
 
             <input type="submit" class="btn -big" value="Добавить" />
         </form>
@@ -18,7 +22,67 @@
 </template>
 
 <script>
-export default {};
+import Input from "@/components/input.vue"
+
+export default {
+    data() {
+        return {
+            note: {
+                id: 0,
+                title: "",
+                text: ""
+            },
+            titleErrorMessage: null,
+            textErrorMessage: null
+        };
+    },
+
+    components: {
+        Input
+    },
+
+    computed: {},
+
+    methods: {
+        formSubmit() {
+            const note = {
+                id: Date.now(),
+                title: this.note.title,
+                text: this.note.text
+            };
+
+            if (this.isFormValid()) {
+                this.$store.commit("addNote", note);
+                this.clearForm();
+            }
+        },
+
+        isFormValid() {
+            let result = true;
+
+            if (!this.note.title) {
+                this.titleErrorMessage = "Это поле обязательно для заполнения.";
+                result = false;
+            } else {
+                this.titleErrorMessage = null;
+            }
+
+            if (!this.note.text) {
+                this.textErrorMessage = "Это поле обязательно для заполнения.";
+                result = false;
+            } else {
+                this.textErrorMessage = null;
+            }
+
+            return result;
+        },
+
+        clearForm() {
+            this.note.text = "";
+            this.note.title = "";
+        }
+    }
+};
 </script>
 
 <style scoped lang="scss">
@@ -41,34 +105,6 @@ export default {};
     .btn {
         display: block;
         margin: 40px auto;
-    }
-}
-
-.input {
-    display: block;
-    > .label {
-        display: block;
-        font-size: 18px;
-        line-height: 22px;
-        padding-bottom: 3px;
-    }
-
-    > input,
-    > textarea {
-        box-sizing: border-box;
-        display: block;
-        width: 100%;
-        resize: vertical;
-        padding: 5px;
-        font-size: 16px;
-        line-height: 18px;
-        border-radius: 2px;
-        border: 1px solid #eca8ce;
-    }
-
-    > textarea {
-        height: 200px;
-        min-height: 200px;
     }
 }
 

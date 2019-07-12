@@ -4,13 +4,13 @@
             <button class="icon" type="button">
                 <Icon><icon-edit /></Icon>
             </button>
-            <button class="icon" type="button">
+            <button class="icon" type="button" @click="deleteNote">
                 <Icon viewbox="0 0 22 18" width="22"><icon-delete /></Icon>
             </button>
         </div>
-        <h6 class="title">Some title</h6>
+        <h6 class="title">{{ title }}</h6>
         <div class="text">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>{{ text }}</p>
         </div>
     </div>
 
@@ -26,16 +26,28 @@ export default {
         Icon,
         IconEdit,
         IconDelete,
-    }
+    },
+
+    methods: {
+        deleteNote() {
+            this.$emit("deleteBtnClick", {
+                id: this.id,
+                title: this.title
+            });
+        }
+    },
+
+    props: ["id", "title", "text"]
 }
 </script>
 
 <style scoped lang="scss">
 .card-1 {
     border-top: 2px solid #bdfd37;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
     box-sizing: border-box;
     padding: 10px 15px 20px 22px;
+    transition: .3s;
 
     > .title {
         font-weight: 500;
@@ -49,6 +61,11 @@ export default {
         font-size: 14px;
         line-height: 16px;
     }
+
+    &:hover {
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-color: #DF007E;
+    }
 }
 
 .card-1-actions {
@@ -57,7 +74,6 @@ export default {
         color: #DF007E;
         display: inline-block;
         padding: 0 5px;
-        cursor: pointer;
         transition: .3s;
 
         &:hover {

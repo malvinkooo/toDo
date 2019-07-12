@@ -14,27 +14,47 @@
 
         <div class="container">
             <div class="list">
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
-                <Card></Card>
+                <Card
+                    v-for="note in notesList"
+                    v-bind="note"
+                    :key="note.id"
+                    v-on:deleteBtnClick="showConfirmPopup"></Card>
             </div>
         </div>
 
         <button type="button" class="float-btn" @click.stop="showDrawer">+</button>
+        
+        <ConfirmPopup
+            v-bind:popupData="popupData"
+            v-bind:isVisible="isConfirmPopupVisible"
+            v-on:closeBtnClick="hideConfirmPopup"
+        ></ConfirmPopup>
     </div>
 </template>
 
 <script>
-import Header from "@/components/header.vue";
-import ModifyNoteForm from "@/components/modifyNoteForm.vue";
-import Card from "@/components/card.vue";
-import Icon from "@/components/icon.vue";
-import IconClose from "@/components/icons/IconClose.vue";
+import Header from "@/components/header.vue"
+import ModifyNoteForm from "@/components/modifyNoteForm.vue"
+import Card from "@/components/card.vue"
+import Icon from "@/components/icon.vue"
+import IconClose from "@/components/icons/IconClose.vue"
+import ConfirmPopup from "@/components/confirmPopup.vue"
 
 export default {
     data() {
-        return {};
+        return {
+            isConfirmPopupVisible: false,
+            popupData: {
+                id: 0,
+                title: "",
+            }
+        }
+    },
+
+    computed: {
+        notesList() {
+            return this.$store.state.notes
+        }
     },
 
     components: {
@@ -42,7 +62,8 @@ export default {
         ModifyNoteForm,
         Card,
         Icon,
-        IconClose
+        IconClose,
+        ConfirmPopup
     },
 
     methods: {
@@ -54,6 +75,16 @@ export default {
         hideDrawer() {
             const body = document.querySelector("body");
             body.classList.remove("-drawer-opened");
+        },
+
+        showConfirmPopup(data) {
+            this.popupData.id = data.id
+            this.popupData.title = data.title
+            this.isConfirmPopupVisible = true
+        },
+
+        hideConfirmPopup() {
+            this.isConfirmPopupVisible = false
         }
     }
 };
@@ -108,7 +139,6 @@ body {
         margin: 40px auto;
         color: #eca8ce;
         transition: 0.3s;
-        cursor: pointer;
 
         &:hover {
             color: #df007e;

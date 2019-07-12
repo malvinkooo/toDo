@@ -65,5 +65,18 @@ button {
     &:hover {
         background-color: #8de300;
     }
+
+    &.-pink {
+        background-color: #df007e;
+        color: #fff;
+
+        &:hover {
+            background-color: #E954A9;
+        }
+    }
+}
+
+.icon {
+    cursor: pointer;
 }
 </style>
