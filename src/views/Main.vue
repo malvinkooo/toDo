@@ -37,12 +37,12 @@
 </template>
 
 <script>
-import Header from "@/components/header.vue";
-import ModifyNoteForm from "@/components/modifyNoteForm.vue";
-import Card from "@/components/card.vue";
-import Icon from "@/components/icon.vue";
-import IconClose from "@/components/icons/IconClose.vue";
-import ConfirmPopup from "@/components/confirmPopup.vue";
+import Header from "@/components/header.vue"
+import ModifyNoteForm from "@/components/modifyNoteForm.vue"
+import Card from "@/components/card.vue"
+import Icon from "@/components/icon.vue"
+import IconClose from "@/components/icons/IconClose.vue"
+import ConfirmPopup from "@/components/confirmPopup.vue"
 
 export default {
     data() {
@@ -99,7 +99,7 @@ export default {
         },
 
         hideConfirmPopup() {
-            this.isConfirmPopupVisible = false;
+            this.isConfirmPopupVisible = false
         },
 
         showEditDrawer(data) {

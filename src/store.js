@@ -23,19 +23,19 @@ export default new Vuex.Store({
         },
 
         addUser(state, email) {
-            state.email = email;
+            state.email = email
         },
 
         deleteUser(state) {
-            state.email = null;
+            state.email = null
         },
 
         setEditFormMode(state) {
-            state.formMode = "edit";
+            state.formMode = "edit"
         },
 
         setAddFormMode(state) {
-            state.formMode = "add";
+            state.formMode = "add"
         }
     },
     actions: {
