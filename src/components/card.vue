@@ -39,11 +39,7 @@ export default {
 
         editNote() {
             this.$store.dispatch("setEditFormMode");
-            this.$emit("editBtnClick", {
-                id: this.id,
-                title: this.title,
-                description: this.description,
-            });
+            this.$emit("editBtnClick", this._id);
         }
     },
 

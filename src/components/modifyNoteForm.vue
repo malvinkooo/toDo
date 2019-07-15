@@ -1,9 +1,6 @@
 <template>
     <div class="form-box">
-        <h6
-            class="title">
-            {{mode === 'add' ? "Добавить новую заметку" : "Изменить заметку"}}
-        </h6>
+        <h6 class="title">{{mode === 'add' ? "Добавить новую заметку" : "Изменить заметку"}}</h6>
 
         <form class="form" @submit.prevent="formSubmit">
             <Input
@@ -29,14 +26,14 @@
 </template>
 
 <script>
-import Input from "@/components/input.vue"
+import Input from "@/components/input.vue";
 
 export default {
     data() {
         return {
             titleErrorMessage: null,
             descriptionErrorMessage: null
-        }
+        };
     },
 
     components: {
@@ -47,7 +44,7 @@ export default {
 
     computed: {
         mode() {
-            return this.$store.state.formMode
+            return this.$store.state.formMode;
         }
     },
 
@@ -60,14 +57,31 @@ export default {
 
             if (this.isFormValid()) {
                 if (this.mode === "edit") {
-                    this.$store.commit("updateNote", note);
-                    this.$store.dispatch("setAddFormMode");
-                } else if(this.mode === "add") {
-                    this.$store.dispatch("addNote", note);
+                    this.$store
+                        .dispatch("updateNote", {
+                            id: this.noteData._id,
+                            note
+                        })
+                        .then(response => {
+                            this.$store.dispatch("getNotes");
+                            this.$store.dispatch("setAddFormMode");
+                            this.clearForm();
+                        })
+                        .catch(err => {
+                            console.log(err.response);
+                        });
+                } else if (this.mode === "add") {
+                    this.$store
+                        .dispatch("addNote", note)
+                        .then(response => {
+                            this.$store.dispatch("getNotes");
+                            this.clearForm();
+                        })
+                        .catch(err => {
+                            console.log(err.response);
+                        });
                 }
             }
-
-            // this.clearForm();
         },
 
         isFormValid() {
@@ -81,7 +95,8 @@ export default {
             }
 
             if (!this.noteData.description) {
-                this.descriptionErrorMessage = "Это поле обязательно для заполнения.";
+                this.descriptionErrorMessage =
+                    "Это поле обязательно для заполнения.";
                 result = false;
             } else {
                 this.descriptionErrorMessage = null;

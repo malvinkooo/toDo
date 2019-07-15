@@ -69,20 +69,39 @@ export default new Vuex.Store({
                 })
         },
 
+        getNote(context, noteId) {
+            return axios({
+                    url: `/todo/${noteId}`,
+                    baseURL: context.state.baseUrl,
+                    method: "get",
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                })
+        },
+
         addNote(context, note) {
             note.author = context.state.email;
-
             return axios({
                     url: "/todo",
                     baseURL: context.state.baseUrl,
                     method: "post",
                     data: note,
+                    headers: {
+                        'content-type': 'application/json'
+                    },
                 })
-                .then(response => {
-                    context.dispatch("getNotes");
-                })
-                .catch(err => {
-                    console.log(err);
+        },
+
+        updateNote(context, note) {
+            return axios({
+                    url: `/todo/${note.id}`,
+                    baseURL: context.state.baseUrl,
+                    method: "patch",
+                    data: note.note,
+                    headers: {
+                        'content-type': 'application/json'
+                    },
                 })
         },
 
@@ -91,13 +110,12 @@ export default new Vuex.Store({
                     url: `/todo/${noteId}`,
                     baseURL: context.state.baseUrl,
                     method: "delete",
+                    headers: {
+                        'content-type': 'application/json'
+                    },
                 })
                 .then(response => {
                     context.commit("removeNote", noteId);
-                    // context.dispatch("getNotes");
-                })
-                .catch(err => {
-                    console.log(err);
                 })
         }
     }

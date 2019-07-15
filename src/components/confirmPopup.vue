@@ -36,8 +36,14 @@ export default {
         },
 
         deleteCard() {
-            this.$store.dispatch("removeNote", this.popupData.id);
-            this.$emit("closeBtnClick");
+            this.$store
+                .dispatch("removeNote", this.popupData.id)
+                .then(() => {
+                    this.$emit("closeBtnClick");
+                })
+                .catch(err => {
+                    console.log(err.response);
+                });
         }
     },
 
@@ -95,7 +101,7 @@ export default {
     display: flex;
     justify-content: center;
 
-    >.btn {
+    > .btn {
         &:first-child {
             margin-right: 15px;
         }

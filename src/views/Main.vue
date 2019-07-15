@@ -3,9 +3,7 @@
         <Header></Header>
 
         <div class="drawer" @click.stop>
-            <ModifyNoteForm
-                :noteData.sync="cardData"
-            ></ModifyNoteForm>
+            <ModifyNoteForm :noteData.sync="cardData"></ModifyNoteForm>
 
             <button class="icon" type="button" @click="hideDrawer">
                 <Icon viewbox="0 0 40 41" width="40" height="40">
@@ -19,7 +17,7 @@
                 <Card
                     v-for="note in notesList"
                     v-bind="note"
-                    :key="note.id"
+                    :key="note._id"
                     v-on:deleteBtnClick="showConfirmPopup"
                     v-on:editBtnClick="showEditDrawer"
                 ></Card>
@@ -37,12 +35,12 @@
 </template>
 
 <script>
-import Header from "@/components/header.vue"
-import ModifyNoteForm from "@/components/modifyNoteForm.vue"
-import Card from "@/components/card.vue"
-import Icon from "@/components/icon.vue"
-import IconClose from "@/components/icons/IconClose.vue"
-import ConfirmPopup from "@/components/confirmPopup.vue"
+import Header from "@/components/header.vue";
+import ModifyNoteForm from "@/components/modifyNoteForm.vue";
+import Card from "@/components/card.vue";
+import Icon from "@/components/icon.vue";
+import IconClose from "@/components/icons/IconClose.vue";
+import ConfirmPopup from "@/components/confirmPopup.vue";
 
 export default {
     data() {
@@ -52,7 +50,7 @@ export default {
                 id: 0,
                 title: ""
             },
-            cardData: {},
+            cardData: {}
         };
     },
 
@@ -68,23 +66,22 @@ export default {
         Card,
         Icon,
         IconClose,
-        ConfirmPopup,
+        ConfirmPopup
     },
 
     created() {
         if (!window.localStorage.my_email) {
-            this.$router.push("login")
+            this.$router.push("login");
         } else {
-            this.$store.dispatch("addUser", JSON.parse(window.localStorage.my_email))
+            this.$store.dispatch(
+                "addUser",
+                JSON.parse(window.localStorage.my_email)
+            );
         }
 
-        this.$store.dispatch("getNotes")
-            .then(response => {
-                // console.log(response)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        this.$store.dispatch("getNotes").catch(err => {
+            console.log(err.response);
+        });
     },
 
     methods: {
@@ -107,12 +104,14 @@ export default {
         },
 
         hideConfirmPopup() {
-            this.isConfirmPopupVisible = false
+            this.isConfirmPopupVisible = false;
         },
 
-        showEditDrawer(data) {
-            this.cardData = data;
-            this.showDrawer();
+        showEditDrawer(noteId) {
+            this.$store.dispatch("getNote", noteId).then(response => {
+                this.cardData = response.data;
+                this.showDrawer();
+            });
         }
     }
 };
