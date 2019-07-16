@@ -63,7 +63,6 @@ export default {
                             note
                         })
                         .then(response => {
-                            this.$store.dispatch("getNotes");
                             this.$store.dispatch("setAddFormMode");
                             this.clearForm();
                         })
@@ -73,8 +72,7 @@ export default {
                 } else if (this.mode === "add") {
                     this.$store
                         .dispatch("addNote", note)
-                        .then(response => {
-                            this.$store.dispatch("getNotes");
+                        .then(() => {
                             this.clearForm();
                         })
                         .catch(err => {

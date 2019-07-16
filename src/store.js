@@ -16,6 +16,10 @@ export default new Vuex.Store({
             state.notes = notes;
         },
 
+        addNote(state, note) {
+            state.notes = [...state.notes, note]
+        },
+
         removeNote(state, noteId) {
             state.notes = state.notes.filter(itm => itm._id !== noteId)
         },
@@ -91,6 +95,9 @@ export default new Vuex.Store({
                         'content-type': 'application/json'
                     },
                 })
+                .then(response => {
+                    context.commit("addNote", response.data)
+                })
         },
 
         updateNote(context, note) {
@@ -102,6 +109,9 @@ export default new Vuex.Store({
                     headers: {
                         'content-type': 'application/json'
                     },
+                })
+                .then(response => {
+                    context.commit("updateNote", note)
                 })
         },
 
